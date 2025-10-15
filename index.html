@@ -1,92 +1,12 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DailyMyDay — 감성 일기 (데모)</title>
-  <meta name="description" content="모바일 우선 감성 일기 데모 — 캘린더, 감정 선택, 일기 작성, AI 요약(데모용)." />
-  <link rel="stylesheet" href="css/style.css" />
-</head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DailyMyDay</title>
+<link rel="stylesheet" href="./style.css">
 <body>
-  <div class="app">
-    <header>
-      <div class="hdr">
-        <div class="brand">DailyMyDay</div>
-        <div id="headerDate" class="pill"></div>
-      </div>
-    </header>
-
-    <!-- 캘린더 화면 -->
-    <main id="view-calendar" class="view active">
-      <div class="card">
-        <div class="cal-header">
-          <button id="prevMonth">⟵</button>
-          <div id="calTitle">Loading...</div>
-          <button id="nextMonth">⟶</button>
-        </div>
-        <div class="weekday">
-          <div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div>
-        </div>
-        <div id="calGrid" class="grid"></div>
-        <div class="hint">날짜를 눌러 감정/칭찬을 기록하세요.</div>
-      </div>
-    </main>
-
-    <!-- 감정 선택 화면 -->
-    <section id="view-mood" class="view">
-      <div class="card">
-        <div class="soft">선택한 날짜</div>
-        <h2 id="selectedDateText">—</h2>
-
-        <div class="moods">
-          <label class="mood"><input type="radio" name="mood" value="행복"><div class="emoji">😊</div><div class="moodlabel">행복</div></label>
-          <label class="mood"><input type="radio" name="mood" value="차분"><div class="emoji">🌿</div><div class="moodlabel">차분</div></label>
-          <label class="mood"><input type="radio" name="mood" value="설렘"><div class="emoji">✨</div><div class="moodlabel">설렘</div></label>
-          <label class="mood"><input type="radio" name="mood" value="살짝 우울"><div class="emoji">🌧️</div><div class="moodlabel">우울</div></label>
-          <label class="mood"><input type="radio" name="mood" value="피곤"><div class="emoji">😴</div><div class="moodlabel">피곤</div></label>
-        </div>
-
-        <div class="praiseBox">
-          <div class="soft">나에게 하는 한 줄 칭찬</div>
-          <input id="praise" class="praise" placeholder="오늘의 나, 잘한 것…" maxlength="60">
-          <div class="praiseCount"><span id="praiseCount">0</span>/60</div>
-        </div>
-
-        <div class="align-right">
-          <button id="goWrite" class="tab primary">일기 쓰러 가기 ⟶</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- 작성 화면 -->
-    <section id="view-write" class="view">
-      <div class="card">
-        <div class="writeHeader">
-          <div>
-            <div class="soft">선택한 날짜</div>
-            <div id="writeDate" class="writeDate"></div>
-          </div>
-          <div id="writeMood" class="badge">감정: —</div>
-        </div>
-
-        <textarea id="diary" class="diary" placeholder="하루 일과를 자유롭게 적어보세요."></textarea>
-        <div class="writeMeta">
-          <div class="soft">원형 버튼을 눌러 AI 요약 받기</div>
-          <div class="soft" id="count">0자</div>
-        </div>
-        <button id="fab" class="fab">●</button>
-      </div>
-    </section>
-
-    <nav>
-      <div class="tabs">
-        <div class="tab active" data-tab="calendar">캘린더</div>
-        <div class="tab" data-tab="mood">감정</div>
-        <div class="tab" data-tab="write">작성</div>
-      </div>
-    </nav>
-  </div>
-
-  <script src="js/app.js" defer></script>
+  <h1>DailyMyDay</h1>
+  <p id="ping">로딩 중…</p>
+  <script src="./app.js" defer></script>
 </body>
 </html>
