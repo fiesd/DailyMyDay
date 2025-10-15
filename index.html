@@ -2,79 +2,10 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DailyMyDay — 감성 일기 (데모)</title>
   <meta name="description" content="모바일 우선 감성 일기 데모 — 캘린더, 감정 선택, 일기 작성, AI 요약(데모용)." />
-  <style>
-    :root{
-      --bg:#f8f6f4; --paper:#ffffff; --ink:#2e2a27; --sub:#6f6a67;
-      --primary:#a684ff; --primary-weak:#ece5ff; --accent-weak:#ffe9de;
-      --radius:16px; --shadow:0 10px 28px rgba(0,0,0,.08);
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0; padding:0; font-family:system-ui,-apple-system,'Apple SD Gothic Neo',Noto Sans KR,Roboto,'Segoe UI',sans-serif; background:linear-gradient(180deg,#fbfaf9,var(--bg)); color:var(--ink); -webkit-font-smoothing:antialiased}
-
-    .app{max-width:720px; margin:0 auto; min-height:100vh; display:flex; flex-direction:column}
-    header{position:sticky; top:0; z-index:20; background:rgba(255,255,255,.7); backdrop-filter:blur(6px); border-bottom:1px solid rgba(0,0,0,.04)}
-    .hdr{display:flex; align-items:center; padding:12px 16px; gap:12px}
-    .brand{font-weight:800}
-    .pill{margin-left:auto; font-size:12px; padding:6px 10px; background:var(--primary-weak); color:#4a2db3; border-radius:999px}
-
-    .view{display:none; padding:14px}
-    .view.active{display:block}
-    .card{background:var(--paper); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px}
-
-    /* calendar */
-    .cal-header{display:flex; align-items:center; justify-content:space-between}
-    .weekday{display:grid; grid-template-columns:repeat(7,1fr); gap:6px; color:var(--sub); font-size:12px; margin-top:8px}
-    .grid{display:grid; grid-template-columns:repeat(7,1fr); gap:6px; margin-top:8px}
-    .cell{aspect-ratio:1/1; border-radius:12px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-weight:700; user-select:none}
-    .cell.empty{background:transparent; cursor:default}
-    .cell.today{background:var(--accent-weak); color:#a15a3a; outline:2px dashed #a15a3a; outline-offset:2px}
-    .cell.selected{background:var(--primary-weak); border:2px solid rgba(90,60,200,.12); outline:2px solid rgba(90,60,200,.28); outline-offset:2px}
-
-    .moods{display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin-top:10px}
-    .mood{background:#faf8ff; border-radius:12px; padding:10px; text-align:center; cursor:pointer; position:relative; transition:transform .08s ease, box-shadow .12s ease}
-    .mood input{display:none}
-    /* 선택 시 하이라이트(:has 지원 브라우저) */
-    .mood:has(input:checked){
-      background:#fff; outline:2px solid #5a3dc6; box-shadow:0 8px 18px rgba(90,61,198,.18);
-      transform:translateY(-1px);
-    }
-    /* 키보드 접근성 */
-    .mood:has(input:focus-visible){outline:2px dashed #5a3dc6; outline-offset:2px}
-    /* 폴백용 클래스(:has 미지원 브라우저) */
-    .mood.selected{
-      background:#fff; outline:2px solid #5a3dc6; box-shadow:0 8px 18px rgba(90,61,198,.18);
-      transform:translateY(-1px);
-    }
-
-    textarea.diary{width:100%; min-height:46vh; padding:12px; border-radius:12px; border:1px solid #eee; resize:vertical}
-
-    .fab{position:fixed; right:16px; bottom:96px; width:64px; height:64px; border-radius:999px; background:var(--primary); color:#fff; font-size:20px; display:grid; place-items:center; z-index:40; box-shadow:0 12px 28px rgba(166,132,255,.35); border:0}
-
-    nav{position:sticky; bottom:0; background:rgba(255,255,255,.85); border-top:1px solid rgba(0,0,0,.06);}
-    .tabs{display:grid; grid-template-columns:repeat(5,1fr)} /* ← 5개 탭 정렬 */
-    .tab{padding:10px 6px; text-align:center; color:var(--sub); cursor:pointer}
-    .tab.active{color:#5a3dc6; font-weight:700}
-
-    /* record list */
-    .list{display:grid; gap:10px}
-    .item{display:flex; gap:10px; align-items:center; padding:10px; border-radius:12px}
-    .badge{padding:6px 8px; border-radius:999px; background:var(--primary-weak); color:#5a3dc6}
-    .smallbtn{border:0; background:transparent; cursor:pointer; font-size:18px}
-
-    /* stats */
-    .chip{display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:999px; background:var(--primary-weak); color:#5a3dc6}
-
-    /* responsive tweaks */
-    @media (max-width:480px){
-      .moods{grid-template-columns:repeat(3,1fr)}
-      .fab{right:12px; bottom:88px}
-      .cal-title{font-size:16px}
-    }
-  </style>
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <div class="app">
@@ -85,465 +16,77 @@
       </div>
     </header>
 
-    <!-- Calendar -->
+    <!-- 캘린더 화면 -->
     <main id="view-calendar" class="view active">
       <div class="card">
         <div class="cal-header">
-          <button id="prevMonth" aria-label="이전 달">⟵</button>
-          <div id="calTitle" class="cal-title" aria-live="polite">Loading</div>
-          <button id="nextMonth" aria-label="다음 달">⟶</button>
+          <button id="prevMonth">⟵</button>
+          <div id="calTitle">Loading...</div>
+          <button id="nextMonth">⟶</button>
         </div>
-        <div class="weekday"><div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div></div>
-        <div id="calGrid" class="grid" style="margin-top:10px"></div>
-        <div style="margin-top:10px; color:var(--sub); font-size:13px; text-align:center">날짜를 눌러 감정/칭찬을 기록하세요.</div>
+        <div class="weekday">
+          <div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div>
+        </div>
+        <div id="calGrid" class="grid"></div>
+        <div class="hint">날짜를 눌러 감정/칭찬을 기록하세요.</div>
       </div>
     </main>
 
-    <!-- Mood -->
-    <section id="view-mood" class="view" aria-labelledby="moodTitle">
+    <!-- 감정 선택 화면 -->
+    <section id="view-mood" class="view">
       <div class="card">
         <div class="soft">선택한 날짜</div>
         <h2 id="selectedDateText">—</h2>
+
         <div class="moods">
-          <label class="mood"><input type="radio" name="mood" value="행복"><div style="font-size:22px">😊</div><div style="font-size:12px; color:#5a3dc6">행복</div></label>
-          <label class="mood"><input type="radio" name="mood" value="차분"><div style="font-size:22px">🌿</div><div style="font-size:12px; color:#5a3dc6">차분</div></label>
-          <label class="mood"><input type="radio" name="mood" value="설렘"><div style="font-size:22px">✨</div><div style="font-size:12px; color:#5a3dc6">설렘</div></label>
-          <label class="mood"><input type="radio" name="mood" value="살짝 우울"><div style="font-size:22px">🌧️</div><div style="font-size:12px; color:#5a3dc6">우울</div></label>
-          <label class="mood"><input type="radio" name="mood" value="피곤"><div style="font-size:22px">😴</div><div style="font-size:12px; color:#5a3dc6">피곤</div></label>
+          <label class="mood"><input type="radio" name="mood" value="행복"><div class="emoji">😊</div><div class="moodlabel">행복</div></label>
+          <label class="mood"><input type="radio" name="mood" value="차분"><div class="emoji">🌿</div><div class="moodlabel">차분</div></label>
+          <label class="mood"><input type="radio" name="mood" value="설렘"><div class="emoji">✨</div><div class="moodlabel">설렘</div></label>
+          <label class="mood"><input type="radio" name="mood" value="살짝 우울"><div class="emoji">🌧️</div><div class="moodlabel">우울</div></label>
+          <label class="mood"><input type="radio" name="mood" value="피곤"><div class="emoji">😴</div><div class="moodlabel">피곤</div></label>
         </div>
-        <div style="margin-top:12px">
+
+        <div class="praiseBox">
           <div class="soft">나에게 하는 한 줄 칭찬</div>
-          <input id="praise" class="praise" placeholder="오늘의 나, 잘한 것…" maxlength="60" style="width:100%; padding:10px; border-radius:10px; border:1px solid #eee; margin-top:8px" aria-describedby="praiseCount">
-          <div style="text-align:right; color:var(--sub); font-size:12px"><span id="praiseCount">0</span>/60</div>
+          <input id="praise" class="praise" placeholder="오늘의 나, 잘한 것…" maxlength="60">
+          <div class="praiseCount"><span id="praiseCount">0</span>/60</div>
         </div>
-        <div style="display:flex; justify-content:flex-end; margin-top:12px"><button id="goWrite" class="tab primary">일기 쓰러 가기 ⟶</button></div>
+
+        <div class="align-right">
+          <button id="goWrite" class="tab primary">일기 쓰러 가기 ⟶</button>
+        </div>
       </div>
     </section>
 
-    <!-- Write -->
+    <!-- 작성 화면 -->
     <section id="view-write" class="view">
       <div class="card">
-        <div style="display:flex; justify-content:space-between; align-items:center">
+        <div class="writeHeader">
           <div>
             <div class="soft">선택한 날짜</div>
-            <div id="writeDate" style="font-weight:700"></div>
+            <div id="writeDate" class="writeDate"></div>
           </div>
           <div id="writeMood" class="badge">감정: —</div>
         </div>
-        <textarea id="diary" class="diary" placeholder="하루 일과를 자유롭게 적어보세요. (저장은 요약 후 가능)"></textarea>
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px">
-          <div style="color:var(--sub)">원형 버튼을 눌러 AI 요약 받기</div>
-          <div style="color:var(--sub)" id="count">0자</div>
+
+        <textarea id="diary" class="diary" placeholder="하루 일과를 자유롭게 적어보세요."></textarea>
+        <div class="writeMeta">
+          <div class="soft">원형 버튼을 눌러 AI 요약 받기</div>
+          <div class="soft" id="count">0자</div>
         </div>
-        <button id="fab" class="fab" aria-label="AI 요약 받기">●</button>
+        <button id="fab" class="fab">●</button>
       </div>
     </section>
 
-    <!-- Records -->
-    <section id="view-records" class="view">
-      <div class="card">
-        <h3>기록</h3>
-        <div class="list" id="recordList"></div>
-        <div style="color:var(--sub); margin-top:8px">이 장치(LocalStorage)에만 저장됩니다.</div>
-      </div>
-    </section>
-
-    <!-- Stats -->
-    <section id="view-stats" class="view">
-      <div class="card">
-        <h3>감정 통계</h3>
-        <div style="display:flex; gap:8px; align-items:center">
-          <div class="soft">범위</div>
-          <select id="statsRange">
-            <option value="30">최근 30일</option>
-            <option value="90">최근 90일</option>
-            <option value="365">최근 1년</option>
-            <option value="all">전체</option>
-          </select>
-        </div>
-        <div id="statsChips" style="margin-top:12px"></div>
-        <canvas id="statsCanvas" width="700" height="280" style="width:100%; height:220px; margin-top:12px"></canvas>
-      </div>
-    </section>
-
-    <nav aria-label="하단 탭">
-      <div class="tabs" role="tablist">
-        <div class="tab active" data-tab="calendar" role="tab" aria-selected="true">캘린더</div>
-        <div class="tab" data-tab="mood" role="tab" aria-selected="false">감정</div>
-        <div class="tab" data-tab="write" role="tab" aria-selected="false">작성</div>
-        <div class="tab" data-tab="records" role="tab" aria-selected="false">기록</div>
-        <div class="tab" data-tab="stats" role="tab" aria-selected="false">통계</div>
+    <nav>
+      <div class="tabs">
+        <div class="tab active" data-tab="calendar">캘린더</div>
+        <div class="tab" data-tab="mood">감정</div>
+        <div class="tab" data-tab="write">작성</div>
       </div>
     </nav>
-
   </div>
 
-  <!-- Modal: summary -->
-  <div id="modal" class="modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.25); align-items:center; justify-content:center; padding:16px; z-index:60">
-    <div style="background:#fff; border-radius:12px; padding:14px; width:min(680px,96%); max-height:70vh; overflow:auto">
-      <h3>AI 요약</h3>
-      <div id="summaryBox" style="white-space:pre-wrap; background:#fafafa; border-radius:10px; padding:12px; min-height:60px"></div>
-      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:10px">
-        <button id="closeModal">닫기</button>
-        <button id="saveEntry" style="background:var(--primary); color:#fff; border:0; padding:8px 12px; border-radius:8px">저장</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal: detail -->
-  <div id="detailModal" class="modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.25); align-items:center; justify-content:center; padding:16px; z-index:60">
-    <div style="background:#fff; border-radius:12px; padding:14px; width:min(680px,96%); max-height:70vh; overflow:auto">
-      <h3 id="detailTitle">기록 상세</h3>
-      <div style="white-space:pre-wrap; background:#fff; padding:8px; border-radius:8px" id="detailDiary"></div>
-      <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:12px">
-        <button id="deleteEntry">삭제</button>
-        <button id="closeDetail" style="background:var(--primary); color:#fff; border:0; padding:8px 12px; border-radius:8px">닫기</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // ===== utils =====
-    const $ = (s,r=document) => r.querySelector(s);
-    const $$ = (s,r=document) => [...r.querySelectorAll(s)];
-    const fmtDate = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-    const fmtHuman = iso => { const d=new Date(iso); return `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일`; };
-
-    const state = { today:new Date(), cursor:new Date(), selectedDateISO:null, selectedMood:null, praise:'', summary:'', entries:[], detailId:null };
-    const STORAGE_KEY = 'dmd-entries-v1';
-    function loadEntries(){ try{ state.entries = JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'); }catch(e){ state.entries = []; } }
-    function saveEntries(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state.entries)); }
-
-    function setHeader(){ $('#headerDate').textContent = fmtHuman(state.today); }
-
-    function renderCalendar(){
-      const y=state.cursor.getFullYear(), m=state.cursor.getMonth();
-      $('#calTitle').textContent = `${y}년 ${m+1}월`;
-      const first=new Date(y,m,1), last=new Date(y,m+1,0);
-      const pre = first.getDay();
-      const cells=[];
-      for(let i=0;i<pre;i++) cells.push({empty:true});
-      for(let d=1; d<=last.getDate(); d++){
-        const iso=fmtDate(new Date(y,m,d));
-        cells.push({d,iso});
-      }
-      const grid=$('#calGrid'); grid.innerHTML='';
-      cells.forEach(c=>{
-        const div=document.createElement('div');
-        div.className='cell' + (c.empty?' empty':'');
-        if(c.empty){ grid.appendChild(div); return; }
-        div.textContent=c.d;
-        if(c.iso===fmtDate(state.today)) div.classList.add('today');
-        if(c.iso===state.selectedDateISO) div.classList.add('selected');
-        div.setAttribute('role','button');
-        div.setAttribute('aria-label', `${c.iso} 선택`);
-        div.addEventListener('click', ()=>{
-          state.selectedDateISO = c.iso;
-          goMood();
-        });
-        grid.appendChild(div);
-      })
-    }
-
-    function updateTabsA11y(){
-      $$('.tab').forEach(t=>{
-        const active = t.classList.contains('active');
-        t.setAttribute('aria-selected', active ? 'true':'false');
-        t.setAttribute('tabindex', active ? '0':'-1');
-      });
-    }
-
-    function show(tab){
-      $$('.view').forEach(v=>v.classList.remove('active'));
-      const el = $('#view-'+tab);
-      if(el) el.classList.add('active');
-      $$('.tab').forEach(t=> t.classList.toggle('active', t.dataset.tab===tab));
-      updateTabsA11y();
-      if(tab==='stats') renderStats();
-      if(tab==='calendar') renderCalendar(); // 캘린더 복귀 시 선택/하이라이트 유지
-    }
-
-    function goMood(){
-      show('mood');
-      $('#selectedDateText').textContent = fmtHuman(state.selectedDateISO);
-      const found = state.entries.find(e=>e.dateISO===state.selectedDateISO);
-      if(found){
-        state.selectedMood = found.mood || null;
-        state.praise = found.praise || '';
-      }
-      $$('#view-mood input[name="mood"]').forEach(r=> r.checked = (r.value===state.selectedMood));
-      $('#praise').value = state.praise || '';
-      $('#praiseCount').textContent = String($('#praise').value.length);
-      // :has() 폴백용 UI 동기화
-      syncMoodUI();
-    }
-
-    function goWrite(){
-      show('write');
-      $('#writeDate').textContent = fmtHuman(state.selectedDateISO);
-      $('#writeMood').textContent = `감정: ${state.selectedMood||'—'}`;
-      const found = state.entries.find(e=>e.dateISO===state.selectedDateISO);
-      $('#diary').value = found?.content || '';
-      $('#count').textContent = String($('#diary').value.length);
-    }
-
-    function goRecords(){ show('records'); renderRecords(); }
-
-    function renderRecords(){
-      const box = $('#recordList');
-      if(!state.entries.length){
-        box.innerHTML = '<div style="color:var(--sub)">아직 저장된 기록이 없습니다.</div>';
-        return;
-      }
-      const list = [...state.entries].sort((a,b)=> new Date(b.createdAt)-new Date(a.createdAt));
-      box.innerHTML='';
-      list.forEach(e=>{
-        const it = document.createElement('div');
-        it.className='item card';
-        it.innerHTML = `
-          <div class="badge">${e.mood||'—'}</div>
-          <div style="flex:1">
-            <div style="font-weight:700">${fmtHuman(e.dateISO)}</div>
-            <div class="subtitle">${(e.praise||'').replace(/</g,'&lt;')}</div>
-          </div>
-          <div><button class="smallbtn" title="삭제" aria-label="기록 삭제">🗑️</button></div>`;
-        it.querySelector('.smallbtn').addEventListener('click',(ev)=>{
-          ev.stopPropagation();
-          if(confirm('이 기록을 삭제할까요?')){
-            state.entries = state.entries.filter(x=>x.id!==e.id);
-            saveEntries();
-            renderRecords();
-            renderStats();
-          }
-        });
-        it.addEventListener('click', ()=> openDetail(e.id));
-        box.appendChild(it);
-      })
-    }
-
-    function openDetail(id){
-      const e = state.entries.find(x=>x.id===id);
-      if(!e) return;
-      state.detailId = id;
-      $('#detailTitle').textContent = `${fmtHuman(e.dateISO)} 기록`;
-      $('#detailDiary').textContent = `${e.content}\n\n— 요약 —\n${e.summary||''}`;
-      $('#detailModal').style.display='flex';
-    }
-    function closeDetail(){ $('#detailModal').style.display='none'; }
-    function deleteDetail(){
-      if(state.detailId==null) return closeDetail();
-      if(!confirm('이 기록을 삭제할까요?')) return;
-      state.entries = state.entries.filter(e=>e.id!==state.detailId);
-      saveEntries();
-      state.detailId=null;
-      closeDetail();
-      renderRecords();
-      renderStats();
-    }
-
-    // ===== AI 요약: 데모용 (브라우저에 키 포함 — 배포 금지 권장) =====
-    const OPENAI_KEY = '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';
-
-    async function getSummary(text, dateISO, mood, praise){
-      const prompt = `다음 일기를 한국어로 간결하게 요약해줘. 날짜: ${dateISO}\n감정: ${mood||'—'}\n칭찬: ${praise||''}\n\n일기:\n${text}\n\n- 요약은 3문장 이내로.`;
-      const body = { model: 'gpt-4o-mini', input: prompt };
-      const res = await fetch('https://api.openai.com/v1/responses', {
-        method: 'POST',
-        headers: { 'Content-Type':'application/json', 'Authorization': `Bearer ${OPENAI_KEY}` },
-        body: JSON.stringify(body)
-      });
-      if(!res.ok){ const txt = await res.text(); throw new Error('요약 API 오류: '+txt); }
-      const data = await res.json();
-      const out = data.output?.[0]?.content?.[0]?.text || data.output_text || JSON.stringify(data);
-      return String(out).trim();
-    }
-
-    // ===== stats =====
-    const ALL_MOODS = ['행복','차분','설렘','살짝 우울','피곤','—']; // 과거 데이터 대비해 '—' 포함
-    const MOOD_COLORS = {
-      '행복':'#ffd6a5','차분':'#bde0fe','설렘':'#e5b9ff','살짝 우울':'#c9d6ff','피곤':'#ffc8dd','—':'#e9ecef'
-    };
-
-    function computeStats(range){
-      const now=new Date();
-      let from=new Date(0);
-      if(range!=='all'){
-        const days = Number(range)||30;
-        from = new Date(now.getFullYear(), now.getMonth(), now.getDate()-days);
-      }
-      const counts = Object.fromEntries(ALL_MOODS.map(m=>[m,0]));
-      state.entries.forEach(e=>{
-        const d=new Date(e.dateISO);
-        if(d>=from && d<=now){
-          const k = ALL_MOODS.includes(e.mood) ? e.mood : '—';
-          counts[k] = (counts[k]||0)+1;
-        }
-      });
-      return counts;
-    }
-
-    function renderStats(){
-      const range = $('#statsRange')?.value||'30';
-      const counts = computeStats(range);
-
-      // 칩
-      const chips = $('#statsChips'); chips.innerHTML='';
-      Object.entries(counts).sort((a,b)=>b[1]-a[1]).forEach(([k,v])=>{
-        const el = document.createElement('div');
-        el.className='chip';
-        el.innerHTML = `<span style="width:10px;height:10px;border-radius:50%;display:inline-block;background:${MOOD_COLORS[k]||'#ddd'}"></span>&nbsp;${k} • ${v}`;
-        chips.appendChild(el);
-      });
-
-      // 바차트
-      const cvs = $('#statsCanvas');
-      const ctx = cvs.getContext('2d');
-      ctx.clearRect(0,0,cvs.width,cvs.height);
-      const labels = Object.keys(counts);
-      const values = Object.values(counts);
-      const pad=40, gap=22; const W=cvs.width-pad*2; const H=cvs.height-pad*2;
-      const max = Math.max(1, ...values); // 0분모 방지
-      const barW = Math.max(20,(W - gap*(labels.length-1))/labels.length);
-
-      if(!labels.length){
-        ctx.fillStyle='#999'; ctx.font='14px system-ui';
-        ctx.fillText('표시할 데이터가 없습니다.',16,40);
-        return;
-      }
-
-      labels.forEach((lb,i)=>{
-        const x = pad + i*(barW+gap);
-        const h = Math.round(H*(values[i]/max));
-        const y = pad + (H - h);
-        ctx.fillStyle = MOOOD_COLOR_SAFE(lb);
-        ctx.fillRect(x,y,barW,h);
-        ctx.fillStyle='#6f6a67'; ctx.font='12px system-ui';
-        ctx.fillText(lb, x, cvs.height-12);
-        ctx.fillText(String(values[i]), x, y-6);
-      });
-    }
-
-    function MOOOD_COLOR_SAFE(key){ return MOOD_COLORS[key] || '#ddd'; }
-
-    // ===== :has() 폴백용 =====
-    const moodCards = []; // 채워질 예정
-    function syncMoodUI(){
-      moodCards.forEach(c=>{
-        const checked = c.querySelector('input')?.checked;
-        c.classList.toggle('selected', !!checked);
-      });
-    }
-
-    // ===== 바인딩 =====
-    function bind(){
-      // 탭
-      $$('.tab').forEach(t=> t.addEventListener('click', ()=>{
-        const tab = t.dataset.tab;
-        if(tab==='calendar') show('calendar');
-        else if(tab==='mood') show('mood');
-        else if(tab==='write') show('write');
-        else if(tab==='records') goRecords();
-        else if(tab==='stats') show('stats');
-      }));
-
-      $('#prevMonth').addEventListener('click', ()=>{ state.cursor.setMonth(state.cursor.getMonth()-1); renderCalendar(); });
-      $('#nextMonth').addEventListener('click', ()=>{ state.cursor.setMonth(state.cursor.getMonth()+1); renderCalendar(); });
-
-      $$('#view-mood input[name="mood"]').forEach(r=> r.addEventListener('change', ()=>{
-        state.selectedMood = r.value;
-        syncMoodUI(); // 폴백
-      }));
-
-      // 폴백 클릭 바인딩
-      moodCards.push(...$$('.mood'));
-      moodCards.forEach(c=>{
-        c.addEventListener('click', ()=> setTimeout(syncMoodUI, 0));
-      });
-      syncMoodUI();
-
-      $('#praise').addEventListener('input', e=>{
-        state.praise = e.target.value;
-        $('#praiseCount').textContent = String(state.praise.length);
-      });
-
-      $('#goWrite').addEventListener('click', ()=>{
-        if(!state.selectedDateISO){ alert('날짜를 선택해 주세요.'); return; }
-        goWrite();
-      });
-
-      $('#diary').addEventListener('input', e=>{ $('#count').textContent = String(e.target.value.length); });
-
-      $('#fab').addEventListener('click', async ()=>{
-        const text = $('#diary').value.trim();
-        if(!state.selectedDateISO){ alert('날짜를 먼저 선택해 주세요.'); return; }
-        if(!text){ alert('일기를 먼저 작성해 주세요.'); return; }
-        $('#fab').disabled=true; $('#fab').textContent='…';
-        try{
-          const sum = await getSummary(text, state.selectedDateISO, state.selectedMood, state.praise);
-          state.summary = sum;
-          $('#summaryBox').textContent = sum;
-          $('#modal').style.display='flex';
-        }catch(e){
-          console.error(e);
-          alert('요약 중 오류가 발생했습니다. 콘솔을 확인하세요.');
-        } finally{
-          $('#fab').disabled=false; $('#fab').textContent='●';
-        }
-      });
-
-      $('#closeModal').addEventListener('click', ()=>$('#modal').style.display='none');
-
-      // 저장: 감정 미선택 방지
-      $('#saveEntry').addEventListener('click', ()=>{
-        if(!state.selectedMood){
-          alert('감정을 선택해 주세요. (통계 집계를 위해 필요합니다)');
-          return;
-        }
-        const content = $('#diary').value.trim();
-        const id = `${state.selectedDateISO}-${Date.now()}`;
-        // 동일 날짜 기존 항목 제거 후 저장(덮어쓰기)
-        state.entries = state.entries.filter(e=> e.dateISO!==state.selectedDateISO);
-        state.entries.push({
-          id, dateISO: state.selectedDateISO, mood: state.selectedMood, praise: state.praise,
-          content, summary: state.summary, createdAt: new Date().toISOString()
-        });
-        saveEntries();
-        $('#modal').style.display='none';
-        alert('저장되었습니다.');
-        goRecords();
-        renderStats();
-      });
-
-      $('#closeDetail').addEventListener('click', closeDetail);
-      $('#deleteEntry').addEventListener('click', deleteDetail);
-
-      $('#statsRange').addEventListener('change', renderStats);
-    }
-
-    function init(){
-      loadEntries();
-      setHeader();
-      state.cursor = new Date(state.today.getFullYear(), state.today.getMonth(), 1);
-      state.selectedDateISO = fmtDate(state.today);
-      renderCalendar();
-      bind();
-      updateTabsA11y();
-    }
-    document.addEventListener('DOMContentLoaded', init);
-
-    // minimal console tests
-    (function selfTests(){
-      try{
-        console.group('DailyMyDay self-tests');
-        const tabs = document.querySelector('.tabs');
-        console.assert(!!tabs,'tabs 존재');
-        console.assert(tabs.children.length>=5,'탭 갯수 확인');
-        console.assert(typeof renderCalendar==='function','renderCalendar exists');
-        console.assert(typeof renderStats==='function','renderStats exists');
-        console.log('self-tests OK');
-        console.groupEnd();
-      }catch(e){ console.error('self-tests failed',e); }
-    })();
-  </script>
+  <script src="js/app.js" defer></script>
 </body>
 </html>
